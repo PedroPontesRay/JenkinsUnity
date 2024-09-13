@@ -43,8 +43,8 @@ namespace SuperUnityBuild.Generated
         public const int buildCounter = 1;
         public const ReleaseType releaseType = ReleaseType.NewReleaseType;
         public const Platform platform = Platform.PC;
-        public const ScriptingBackend scriptingBackend = ScriptingBackend.Mono;
-        public const Architecture architecture = Architecture.Windows_x86;
+        public const ScriptingBackend scriptingBackend = ScriptingBackend.IL2CPP;
+        public const Architecture architecture = Architecture.Windows_x64;
         public const Distribution distribution = Distribution.DistributionName;
     }
 }
