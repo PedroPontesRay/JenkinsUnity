@@ -1,11 +1,5 @@
 {
   "dependencies": {
-    "com.github.superunitybuild.buildtool": {
-      "version": "file:buildtool-dev",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
     "com.unity.collab-proxy": {
       "version": "2.5.1",
       "depth": 0,
