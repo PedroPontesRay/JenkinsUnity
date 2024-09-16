@@ -11,6 +11,7 @@ namespace SuperUnityBuild.BuildTool
     {
         public const string NONE = "None";
 
+
         public const string FileName = "BuildConstants.cs";
 
         public static string FindFile()
