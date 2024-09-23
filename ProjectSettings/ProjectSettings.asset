@@ -643,11 +643,11 @@ PlayerSettings:
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
   scriptingDefineSymbols:
-    Standalone: BUILD_TYPE_NEWRELEASETYPE;BUILD_PLATFORM_PC;BUILD_ARCH_WINDOWSX86;BUILD_BACKEND_MONO;BUILD_DIST_DISTRIBUTIONNAME
+    Standalone: BUILD_TYPE_NEWRELEASETYPE;BUILD_PLATFORM_PC;BUILD_ARCH_WINDOWSX64;BUILD_BACKEND_IL2CPP;BUILD_DIST_DISTRIBUTIONNAME
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
-    Standalone: 0
+    Standalone: 1
   il2cppCompilerConfiguration: {}
   il2cppCodeGeneration: {}
   managedStrippingLevel:
