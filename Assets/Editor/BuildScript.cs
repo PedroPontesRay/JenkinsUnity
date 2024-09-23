@@ -3,25 +3,29 @@ using UnityEngine;
 using UnityEditor;
 using System.IO;
 using UnityEditor.Build.Reporting;
+using System.Linq;
 
 public class BuildScript
 {
-    static void BuildWindows()
+    static string buildPath = "C:/Build/BuildWindows/";
+
+    #region Dev
+    [MenuItem("Tools/BuildWindows/Dev")]
+    public static void BuildWindowsDev()
     {
         //LogToEditorLog("[BuildScript] Start Build Process");
         try
         {
-            string[] scenes = { "Assets/Scenes/SampleScene.unity" };
-            string buildPath = "C:/Users/thera/Build/WindowsBuild";
-
             BuildPlayerOptions options = new BuildPlayerOptions();
-            options.scenes = scenes;
+            options.scenes = EditorBuildSettings.scenes.Where(s=>s.path.Contains("SampleScene")).Select(ss => ss.path).ToArray();
+
+            buildPath += "_Dev";
+
             options.locationPathName = buildPath;
             options.target = BuildTarget.StandaloneWindows;
-            options.options = BuildOptions.None;
+            options.options = BuildOptions.Development;
 
             BuildReport report = BuildPipeline.BuildPlayer(options);
-
         }
         catch(System.Exception ex) 
         {
@@ -29,6 +33,59 @@ public class BuildScript
         }
         
     }
+    #endregion
+
+    #region Master
+    [MenuItem("Tools/BuildWindows/Master")]
+    public static void BuildWindowsMaster()
+    {
+        //LogToEditorLog("[BuildScript] Start Build Process");
+        try
+        {
+            BuildPlayerOptions options = new BuildPlayerOptions();
+            options.scenes = EditorBuildSettings.scenes.Where(s => s.path.Contains("SampleScene")).Select(ss=>ss.path).ToArray();
+
+            buildPath += "_Master";
+
+            options.locationPathName = buildPath;
+            options.target = BuildTarget.StandaloneWindows;
+            options.options = BuildOptions.None;
+
+            BuildReport report = BuildPipeline.BuildPlayer(options);
+        }
+        catch (System.Exception ex)
+        {
+            LogToEditorLog($"[BuildScripts]Build failed: {ex}");
+        }
+
+    }
+    #endregion
+
+    #region Realease
+    [MenuItem("Tools/BuildWindows/Realease")]
+    public static void BuildWindowsRealease()
+    {
+        //LogToEditorLog("[BuildScript] Start Build Process");
+        try
+        {
+            BuildPlayerOptions options = new BuildPlayerOptions();
+            options.scenes = EditorBuildSettings.scenes.Where(s => s.path.Contains("SampleScene")).Select(ss => ss.path).ToArray();
+
+            buildPath += "_Realease";
+
+            options.locationPathName = buildPath;
+            options.target = BuildTarget.StandaloneWindows;
+            options.options = BuildOptions.None;
+
+            BuildReport report = BuildPipeline.BuildPlayer(options);
+        }
+        catch (System.Exception ex)
+        {
+            LogToEditorLog($"[BuildScripts]Build failed: {ex}");
+        }
+
+    }
+    #endregion
 
     static void LogToEditorLog(string message)
     {
@@ -41,4 +98,11 @@ public class BuildScript
             writer.WriteLine(message);
         }
     }
+}
+
+enum BUILDTYPE
+{
+    Development,
+    Realease,
+    Master
 }
