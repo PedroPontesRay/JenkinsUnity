@@ -5,6 +5,7 @@ using System.IO;
 using UnityEditor.Build.Reporting;
 using System.Linq;
 using UnityEditor.Build;
+using System;
 
 public class BuildScript
 {
@@ -14,8 +15,16 @@ public class BuildScript
     [MenuItem("Tools/BuildWindows/Dev")]
     public static void BuildWindowsDev()
     {
+        //Setup new options
         BuildPlayerOptions options = new BuildPlayerOptions();
         options.scenes = EditorBuildSettings.scenes.Where(s=>s.path.Contains("SampleScene")).Select(ss => ss.path).ToArray();
+        //Setup new path or new folder 
+        string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+        string buildPath = Path.Combine("C:\\Users\\thera\\Projeto\\JenkinsUnity\\Builds", timestamp);
+        Directory.CreateDirectory(buildPath);
+        //LOG
+        string logPath = Path.Combine(buildPath, "Editor.log");
+        LogToEditorLog("Starting build for Windows Dev...", logPath);
 
         buildPath += "_Dev";
 
@@ -23,18 +32,18 @@ public class BuildScript
         options.target = BuildTarget.StandaloneWindows;
         options.options = BuildOptions.Development;
 
-        BuildReport report = BuildPipeline.BuildPlayer(options);
+        //Build call
+        BuildReport report = BuildPipeline.BuildPlayer(options.scenes, Path.Combine(buildPath, "MyGame.exe"), BuildTarget.StandaloneWindows, BuildOptions.None);
         BuildSummary summary = report.summary;
 
         if(summary.result == BuildResult.Succeeded)
         {
-            LogToEditorLog ("Build succeeded: " + summary.totalSize + " bytes");
+            LogToEditorLog ("Build succeeded: " + summary.totalSize + " bytes",logPath);
         }
         else if(summary.result == BuildResult.Failed)
         {
-            LogToEditorLog ("Build failed");
+            LogToEditorLog ("Build failed",logPath);
         }
-        
     }
     #endregion
 
@@ -58,7 +67,7 @@ public class BuildScript
         }
         catch (System.Exception ex)
         {
-            LogToEditorLog($"[BuildScripts]Build failed: {ex}");
+            //LogToEditorLog($"[BuildScripts]Build failed: {ex}");
         }
 
     }
@@ -84,7 +93,7 @@ public class BuildScript
         }
         catch (System.Exception ex)
         {
-            LogToEditorLog($"[BuildScripts]Build failed: {ex}");
+            //LogToEditorLog($"[BuildScripts]Build failed: {ex}");
         }
 
     }
@@ -95,13 +104,9 @@ public class BuildScript
 
     }
 
-    static void LogToEditorLog(string message)
+    private static void LogToEditorLog(string message, string logPath)
     {
-        // Path to the Editor.log file
-        string editorLogPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData), "Unity", "Editor", "Editor.log");
-
-        // Append the message to the Editor.log
-        using (StreamWriter writer = new StreamWriter(editorLogPath, true))
+        using (StreamWriter writer = new StreamWriter(logPath, true))
         {
             writer.WriteLine(message);
         }
