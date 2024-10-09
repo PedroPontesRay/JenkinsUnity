@@ -4,6 +4,7 @@ using UnityEditor;
 using System.IO;
 using UnityEditor.Build.Reporting;
 using System.Linq;
+using UnityEditor.Build;
 
 public class BuildScript
 {
@@ -13,23 +14,25 @@ public class BuildScript
     [MenuItem("Tools/BuildWindows/Dev")]
     public static void BuildWindowsDev()
     {
-        //LogToEditorLog("[BuildScript] Start Build Process");
-        try
+        BuildPlayerOptions options = new BuildPlayerOptions();
+        options.scenes = EditorBuildSettings.scenes.Where(s=>s.path.Contains("SampleScene")).Select(ss => ss.path).ToArray();
+
+        buildPath += "_Dev";
+
+        options.locationPathName = buildPath;
+        options.target = BuildTarget.StandaloneWindows;
+        options.options = BuildOptions.Development;
+
+        BuildReport report = BuildPipeline.BuildPlayer(options);
+        BuildSummary summary = report.summary;
+
+        if(summary.result == BuildResult.Succeeded)
         {
-            BuildPlayerOptions options = new BuildPlayerOptions();
-            options.scenes = EditorBuildSettings.scenes.Where(s=>s.path.Contains("SampleScene")).Select(ss => ss.path).ToArray();
-
-            buildPath += "_Dev";
-
-            options.locationPathName = buildPath;
-            options.target = BuildTarget.StandaloneWindows;
-            options.options = BuildOptions.Development;
-
-            BuildReport report = BuildPipeline.BuildPlayer(options);
+            LogToEditorLog ("Build succeeded: " + summary.totalSize + " bytes");
         }
-        catch(System.Exception ex) 
+        else if(summary.result == BuildResult.Failed)
         {
-            LogToEditorLog($"[BuildScripts]Build failed: {ex}");
+            LogToEditorLog ("Build failed");
         }
         
     }
@@ -86,6 +89,11 @@ public class BuildScript
 
     }
     #endregion
+
+    static void Build(bool development,IPostBuildPlayerScriptDLLs compilerConfiguration)
+    {
+
+    }
 
     static void LogToEditorLog(string message)
     {
