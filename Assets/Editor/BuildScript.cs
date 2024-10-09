@@ -12,39 +12,39 @@ public class BuildScript
     static string buildPath = "C:/Build/BuildWindows/";
 
     #region Dev
-    [MenuItem("Tools/BuildWindows/Dev")]
-    public static void BuildWindowsDev()
+    public static void BuildWindowsDev(string buildName, string buildPath)
     {
-        //Setup new options
+        // Setup new options
         BuildPlayerOptions options = new BuildPlayerOptions();
-        options.scenes = EditorBuildSettings.scenes.Where(s=>s.path.Contains("SampleScene")).Select(ss => ss.path).ToArray();
-        //Setup new path or new folder 
+        options.scenes = EditorBuildSettings.scenes.Where(s => s.path.Contains("SampleScene")).Select(ss => ss.path).ToArray();
+
+        // Setup new path or new folder
         string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-        string buildPath = Path.Combine("C:\\Users\\thera\\Projeto\\JenkinsUnity\\Builds", timestamp);
-        Directory.CreateDirectory(buildPath);
-        //LOG
-        string logPath = Path.Combine(buildPath, "Editor.log");
+        string finalBuildPath = Path.Combine(buildPath, buildName + "_" + timestamp);
+        Directory.CreateDirectory(finalBuildPath);
+
+        // LOG
+        string logPath = Path.Combine(finalBuildPath, "Editor.log");
         LogToEditorLog("Starting build for Windows Dev...", logPath);
 
-        buildPath += "_Dev";
-
-        options.locationPathName = buildPath;
+        options.locationPathName = finalBuildPath;
         options.target = BuildTarget.StandaloneWindows;
         options.options = BuildOptions.Development;
 
-        //Build call
-        BuildReport report = BuildPipeline.BuildPlayer(options.scenes, Path.Combine(buildPath, "MyGame.exe"), BuildTarget.StandaloneWindows, BuildOptions.None);
+        // Build call
+        BuildReport report = BuildPipeline.BuildPlayer(options.scenes, Path.Combine(finalBuildPath, "MyGame.exe"), BuildTarget.StandaloneWindows, BuildOptions.None);
         BuildSummary summary = report.summary;
 
-        if(summary.result == BuildResult.Succeeded)
+        if (summary.result == BuildResult.Succeeded)
         {
-            LogToEditorLog ("Build succeeded: " + summary.totalSize + " bytes",logPath);
+            LogToEditorLog("Build succeeded: " + summary.totalSize + " bytes", logPath);
         }
-        else if(summary.result == BuildResult.Failed)
+        else if (summary.result == BuildResult.Failed)
         {
-            LogToEditorLog ("Build failed",logPath);
+            LogToEditorLog("Build failed", logPath);
         }
     }
+
     #endregion
 
     #region Master
@@ -55,7 +55,7 @@ public class BuildScript
         try
         {
             BuildPlayerOptions options = new BuildPlayerOptions();
-            options.scenes = EditorBuildSettings.scenes.Where(s => s.path.Contains("SampleScene")).Select(ss=>ss.path).ToArray();
+            options.scenes = EditorBuildSettings.scenes.Where(s => s.path.Contains("SampleScene")).Select(ss => ss.path).ToArray();
 
             buildPath += "_Master";
 
@@ -99,7 +99,7 @@ public class BuildScript
     }
     #endregion
 
-    static void Build(bool development,IPostBuildPlayerScriptDLLs compilerConfiguration)
+    static void Build(bool development, IPostBuildPlayerScriptDLLs compilerConfiguration)
     {
 
     }
