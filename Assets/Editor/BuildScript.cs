@@ -12,8 +12,25 @@ public class BuildScript
     static string buildPath = "C:/Build/BuildWindows/";
 
     #region Dev
-    public static void BuildWindowsDev(string buildName, string buildPath)
+    public static void BuildWindowsDev()
     {
+        string[] args = Environment.GetCommandLineArgs();
+        string buildName = "";
+        string buildPath = "";
+
+        // Loop through args to find custom arguments
+        for (int i = 0; i < args.Length; i++)
+        {
+            if (args[i] == "-buildName" && i + 1 < args.Length)
+            {
+                buildName = args[i + 1];
+            }
+            else if (args[i] == "-buildPath" && i + 1 < args.Length)
+            {
+                buildPath = args[i + 1];
+            }
+        }
+
         // Setup new options
         BuildPlayerOptions options = new BuildPlayerOptions();
         options.scenes = EditorBuildSettings.scenes.Where(s => s.path.Contains("SampleScene")).Select(ss => ss.path).ToArray();
