@@ -15,7 +15,7 @@ public class BuildScript
     {
         string buildName = System.Environment.GetEnvironmentVariable("BUILD_NAME");
         string buildPath = System.Environment.GetEnvironmentVariable("BUILD_PATH");
-        string buildEnv  =  System.Environment.GetEnvironmentVariable("BUILD_PATH"); 
+        string buildEnv  =  System.Environment.GetEnvironmentVariable("BUILD_ENVIRONMENT"); 
         
 
         // Setup new options
