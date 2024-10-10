@@ -15,6 +15,7 @@ public class BuildScript
     {
         string buildName = System.Environment.GetEnvironmentVariable("BUILD_NAME");
         string buildPath = System.Environment.GetEnvironmentVariable("BUILD_PATH");
+        string buildEnv  =  System.Environment.GetEnvironmentVariable("BUILD_PATH"); 
         
 
         // Setup new options
@@ -32,8 +33,11 @@ public class BuildScript
         try
         {
             options.locationPathName = buildPath;
+
             options.target = BuildTarget.StandaloneWindows;
+
             options.options = BuildOptions.Development;
+            LogToEditorLog("[ENVNAME]: " + buildEnv, logPath);
 
             // Build call
             BuildReport report = BuildPipeline.BuildPlayer(options.scenes, Path.Combine(buildPath, "MyGame 1_0.exe"), BuildTarget.StandaloneWindows, BuildOptions.None);
@@ -103,6 +107,31 @@ public class BuildScript
 */
 
 
+    private BuildTarget GetCurrentBuildEnv(BUILD_ENV buildEnv)
+    {
+        switch(buildEnv){
+
+            case BUILD_ENV.XBOXONE:
+            return BuildTarget.GameCoreXboxOne;
+
+            case BUILD_ENV.XBOXSERIES:
+            return BuildTarget.GameCoreXboxSeries;
+
+            case BUILD_ENV.PLAYSTATION4:
+            return BuildTarget.PS4;
+            case BUILD_ENV.PLAYSTATION5:
+            return BuildTarget.PS5;
+
+            case BUILD_ENV.SWITCH:
+            return BuildTarget.Switch;
+
+            case BUILD_ENV.PC:
+            return BuildTarget.StandaloneWindows;
+        }
+
+        return BuildTarget.NoTarget;
+    }
+
     private static void LogToEditorLog(string message, string logPath)
     {
         message += "[Debug BuildScript]";
@@ -113,9 +142,20 @@ public class BuildScript
     }
 }
 
-enum BUILDTYPE
+enum BUILD_TYPE
 {
     Development,
     Realease,
     Master
+}
+
+enum BUILD_ENV
+{
+    XBOXONE,
+    XBOXSERIES,
+    PLAYSTATION5,
+    PLAYSTATION4,
+    SWITCH,
+    PC,
+    ANDROID
 }
