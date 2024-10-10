@@ -9,61 +9,46 @@ using System;
 
 public class BuildScript
 {
-    static string buildPath = "C:/Build/BuildWindows/";
 
     #region Dev
     public static void BuildWindowsDev()
     {
-        string[] args = Environment.GetCommandLineArgs();
-        string buildName = "";
-        string buildPath = "";
-
-        // Loop through args to find custom arguments
-        for (int i = 0; i < args.Length; i++)
-        {
-            if (args[i] == "-buildName" && i + 1 < args.Length)
-            {
-                buildName = args[i + 1];
-            }
-            else if (args[i] == "-buildPath" && i + 1 < args.Length)
-            {
-                buildPath = args[i + 1];
-            }
-        }
+        string buildName = System.Environment.GetEnvironmentVariable("BUILD_NAME");
+        string buildPath = System.Environment.GetEnvironmentVariable("BUILD_PATH");
+        
 
         // Setup new options
         BuildPlayerOptions options = new BuildPlayerOptions();
         options.scenes = EditorBuildSettings.scenes.Where(s => s.path.Contains("SampleScene")).Select(ss => ss.path).ToArray();
 
         // Setup new path or new folder
-        string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-        string finalBuildPath = Path.Combine(buildPath, buildName + "_" + timestamp);
-        Directory.CreateDirectory(finalBuildPath);
+        buildPath += $"/{buildName}";
+        Directory.CreateDirectory(buildPath);
 
         // LOG
-        string logPath = Path.Combine(finalBuildPath, "Editor.log");
+        string logPath = Path.Combine(buildPath, "Editor.log");
         LogToEditorLog("Starting build for Windows Dev...", logPath);
 
-        options.locationPathName = finalBuildPath;
-        options.target = BuildTarget.StandaloneWindows;
-        options.options = BuildOptions.Development;
-
-        // Build call
-        BuildReport report = BuildPipeline.BuildPlayer(options.scenes, Path.Combine(finalBuildPath, "MyGame.exe"), BuildTarget.StandaloneWindows, BuildOptions.None);
-        BuildSummary summary = report.summary;
-
-        if (summary.result == BuildResult.Succeeded)
+        try
         {
+            options.locationPathName = buildPath;
+            options.target = BuildTarget.StandaloneWindows;
+            options.options = BuildOptions.Development;
+
+            // Build call
+            BuildReport report = BuildPipeline.BuildPlayer(options.scenes, Path.Combine(buildPath, "MyGame 1_0.exe"), BuildTarget.StandaloneWindows, BuildOptions.None);
+            BuildSummary summary = report.summary;
+
             LogToEditorLog("Build succeeded: " + summary.totalSize + " bytes", logPath);
         }
-        else if (summary.result == BuildResult.Failed)
+        catch(Exception ex)
         {
-            LogToEditorLog("Build failed", logPath);
+            LogToEditorLog($"Build failed {ex}", logPath);
         }
     }
 
     #endregion
-
+/*COMENT
     #region Master
     [MenuItem("Tools/BuildWindows/Master")]
     public static void BuildWindowsMaster()
@@ -115,14 +100,12 @@ public class BuildScript
 
     }
     #endregion
+*/
 
-    static void Build(bool development, IPostBuildPlayerScriptDLLs compilerConfiguration)
-    {
-
-    }
 
     private static void LogToEditorLog(string message, string logPath)
     {
+        message += "[Debug BuildScript]";
         using (StreamWriter writer = new StreamWriter(logPath, true))
         {
             writer.WriteLine(message);
