@@ -13,11 +13,11 @@ public class BuildScript
     #region Dev
     public static void BuildWindowsDev()
     {
-        string buildName = System.Environment.GetEnvironmentVariable("BUILD_NAME");
-        string buildPath = System.Environment.GetEnvironmentVariable("BUILD_PATH");
-        string buildEnv  =  System.Environment.GetEnvironmentVariable("BUILD_ENVIRONMENT"); 
+        string buildName = Environment.GetEnvironmentVariable("BUILD_NAME");
+        string buildPath = Environment.GetEnvironmentVariable("BUILD_PATH");
+        string buildPlatform  =  Environment.GetEnvironmentVariable("BUILD_PLATFORM"); 
+        string buildEnv  =  Environment.GetEnvironmentVariable("BUILD_ENVIRONMENT"); 
         
-
         // Setup new options
         BuildPlayerOptions options = new BuildPlayerOptions();
         options.scenes = EditorBuildSettings.scenes.Where(s => s.path.Contains("SampleScene")).Select(ss => ss.path).ToArray();
@@ -34,8 +34,17 @@ public class BuildScript
         {
             options.locationPathName = buildPath;
 
-            options.target = GetCurrentBuildEnv(buildEnv);
-            EditorUserBuildSettings.SwitchActiveBuildTarget(GetCurrentBuildEnv(buildEnv));
+            options.target = GetCurrentBuildPlatform(buildEnv);
+
+            //Setup dev
+            if(buildEnv == "DEV")
+            {
+                SetDevelopmentBuild(true);
+            }
+            else 
+            {
+                SetDevelopmentBuild(false);
+            }
 
             LogToEditorLog($"[BuildScript] Build Env:{options.target}",logPath);
             
@@ -110,9 +119,9 @@ public class BuildScript
 */
 
 
-    private static BuildTarget GetCurrentBuildEnv(string buildEnv)
+    private static BuildTarget GetCurrentBuildPlatform(string buildPlatform)
     {
-        switch(buildEnv){
+        switch(buildPlatform){
 
             case "XBOXONE":
             return BuildTarget.GameCoreXboxOne;
@@ -133,6 +142,11 @@ public class BuildScript
         }
 
         return BuildTarget.NoTarget;
+    }
+
+    private static void SetDevelopmentBuild(bool isDevelopment)
+    {
+        EditorUserBuildSettings.development = isDevelopment;
     }
 
     private static void LogToEditorLog(string message, string logPath)
