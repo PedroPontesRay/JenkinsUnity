@@ -9,14 +9,15 @@ using System;
 
 public class BuildScript
 {
+    static string logPath;
 
     #region Dev
     public static void BuildWindowsDev()
     {
-        string buildName = Environment.GetEnvironmentVariable("BUILD_NAME");
-        string buildPath = Environment.GetEnvironmentVariable("BUILD_PATH");
+        string buildName      = Environment.GetEnvironmentVariable("BUILD_NAME");
+        string buildPath      = Environment.GetEnvironmentVariable("BUILD_PATH");
         string buildPlatform  =  Environment.GetEnvironmentVariable("BUILD_PLATFORM"); 
-        string buildEnv  =  Environment.GetEnvironmentVariable("BUILD_ENVIRONMENT"); 
+        string buildEnv       =  Environment.GetEnvironmentVariable("BUILD_ENVIRONMENT"); 
         
         // Setup new options
         BuildPlayerOptions options = new BuildPlayerOptions();
@@ -27,8 +28,8 @@ public class BuildScript
         Directory.CreateDirectory(buildPath);
 
         // LOG
-        string logPath = Path.Combine(buildPath, "Editor.log");
-        LogToEditorLog("Starting build for Windows Dev...", logPath);
+        logPath = Path.Combine(buildPath, "Editor.log");
+        LogToEditorLog("Starting build for Windows Dev...");
 
         try
         {
@@ -46,7 +47,11 @@ public class BuildScript
                 SetDevelopmentBuild(false);
             }
 
-            LogToEditorLog($"[BuildScript] Build Env:{options.target}",logPath);
+
+
+            LogToEditorLog($"[BuildScript] Build Env Current:{options.target}");
+            LogToEditorLog($"[BuildScript] Build Env OnGet{GetCurrentBuildPlatform(buildEnv)}");
+            LogToEditorLog($"[BuildScript] IsDevelop{EditorUserBuildSettings.development}");
             
 
             options.options = BuildOptions.None;
@@ -55,11 +60,11 @@ public class BuildScript
             BuildReport report = BuildPipeline.BuildPlayer(options.scenes, Path.Combine(buildPath, $"{Application.productName}.exe"), BuildTarget.StandaloneWindows, options.options);
             BuildSummary summary = report.summary;
 
-            LogToEditorLog("Build succeeded: " + summary.totalSize + " bytes", logPath);
+            LogToEditorLog("Build succeeded: " + summary.totalSize + " bytes");
         }
         catch(Exception ex)
         {
-            LogToEditorLog($"Build failed {ex}", logPath);
+            LogToEditorLog($"Build failed {ex}");
         }
     }
 
@@ -149,7 +154,7 @@ public class BuildScript
         EditorUserBuildSettings.development = isDevelopment;
     }
 
-    private static void LogToEditorLog(string message, string logPath)
+    private static void LogToEditorLog(string message)
     {
         message += "[Debug BuildScript]";
         using (StreamWriter writer = new StreamWriter(logPath, true))

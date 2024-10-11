@@ -6,6 +6,6 @@ public class DebugUpdate : MonoBehaviour
 {
     void Update()
     {
-        Debug.LogError("[DebugUpdate]Debug ON UPDATE");
+        Debug.LogError("[DebugUpdate] Debug ON UPDATE");
     }
 }
