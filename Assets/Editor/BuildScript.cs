@@ -36,12 +36,13 @@ public class BuildScript
 
             options.target = GetCurrentBuildEnv(buildEnv);
 
-            LogToEditorLog($"[BuildScript] Build Env:{buildEnv}");
+            LogToEditorLog($"[BuildScript] Build Env:{buildEnv}",logPath);
+            
 
             options.options = BuildOptions.None;
 
             // Build call
-            BuildReport report = BuildPipeline.BuildPlayer(options.scenes, Path.Combine(buildPath, "MyGame 1_0.exe"), BuildTarget.StandaloneWindows, options.options);
+            BuildReport report = BuildPipeline.BuildPlayer(options.scenes, Path.Combine(buildPath, $"{Application.productName}.exe"), BuildTarget.StandaloneWindows, options.options);
             BuildSummary summary = report.summary;
 
             LogToEditorLog("Build succeeded: " + summary.totalSize + " bytes", logPath);
