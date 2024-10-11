@@ -35,8 +35,9 @@ public class BuildScript
             options.locationPathName = buildPath;
 
             options.target = GetCurrentBuildEnv(buildEnv);
+            EditorUserBuildSettings.SwitchActiveBuildTarget(GetCurrentBuildEnv(buildEnv));
 
-            LogToEditorLog($"[BuildScript] Build Env:{buildEnv}",logPath);
+            LogToEditorLog($"[BuildScript] Build Env:{options.target}",logPath);
             
 
             options.options = BuildOptions.None;
