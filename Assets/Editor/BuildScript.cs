@@ -36,6 +36,8 @@ public class BuildScript
 
             options.target = GetCurrentBuildEnv(buildEnv);
 
+            LogToEditorLog($"[BuildScript] Build Env:{buildEnv}");
+
             options.options = BuildOptions.None;
 
             // Build call
