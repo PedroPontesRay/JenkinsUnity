@@ -34,13 +34,12 @@ public class BuildScript
         {
             options.locationPathName = buildPath;
 
-            options.target = BuildTarget.StandaloneWindows;
+            options.target = GetCurrentBuildEnv(buildEnv);
 
-            options.options = BuildOptions.Development;
-            LogToEditorLog("[ENVNAME]: " + buildEnv, logPath);
+            options.options = BuildOptions.None;
 
             // Build call
-            BuildReport report = BuildPipeline.BuildPlayer(options.scenes, Path.Combine(buildPath, "MyGame 1_0.exe"), BuildTarget.StandaloneWindows, BuildOptions.None);
+            BuildReport report = BuildPipeline.BuildPlayer(options.scenes, Path.Combine(buildPath, "MyGame 1_0.exe"), BuildTarget.StandaloneWindows, options.options);
             BuildSummary summary = report.summary;
 
             LogToEditorLog("Build succeeded: " + summary.totalSize + " bytes", logPath);
@@ -107,25 +106,25 @@ public class BuildScript
 */
 
 
-    private BuildTarget GetCurrentBuildEnv(BUILD_ENV buildEnv)
+    private static BuildTarget GetCurrentBuildEnv(string buildEnv)
     {
         switch(buildEnv){
 
-            case BUILD_ENV.XBOXONE:
+            case "XBOXONE":
             return BuildTarget.GameCoreXboxOne;
 
-            case BUILD_ENV.XBOXSERIES:
+            case "XBOXSERIES":
             return BuildTarget.GameCoreXboxSeries;
 
-            case BUILD_ENV.PLAYSTATION4:
+            case "PLAYSTATION4":
             return BuildTarget.PS4;
-            case BUILD_ENV.PLAYSTATION5:
+            case "PLAYSTATION5":
             return BuildTarget.PS5;
 
-            case BUILD_ENV.SWITCH:
+            case "SWITCH":
             return BuildTarget.Switch;
 
-            case BUILD_ENV.PC:
+            case "PC":
             return BuildTarget.StandaloneWindows;
         }
 
