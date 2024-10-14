@@ -144,6 +144,9 @@ public class BuildScript
 
             case "PC":
             return BuildTarget.StandaloneWindows;
+            
+            case "ANDROID":
+            return BuildTarget.Android;
         }
         return BuildTarget.NoTarget;
     }
