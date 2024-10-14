@@ -50,8 +50,8 @@ public class BuildScript
 
 
             LogToEditorLog($"[BuildScript] Build Env Current:{options.target}");
-            LogToEditorLog($"[BuildScript] Build Env OnGet{GetCurrentBuildPlatform(buildEnv)}");
-            LogToEditorLog($"[BuildScript] IsDevelop{EditorUserBuildSettings.development}");
+            LogToEditorLog($"[BuildScript] Build Env OnGet:{GetCurrentBuildPlatform(buildEnv)}");
+            LogToEditorLog($"[BuildScript] IsDevelop:{EditorUserBuildSettings.development}");
             
 
             options.options = BuildOptions.None;
@@ -156,7 +156,6 @@ public class BuildScript
 
     private static void LogToEditorLog(string message)
     {
-        message += "[Debug BuildScript]";
         using (StreamWriter writer = new StreamWriter(logPath, true))
         {
             writer.WriteLine(message);
