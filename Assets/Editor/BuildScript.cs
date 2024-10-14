@@ -48,7 +48,7 @@ public class BuildScript
             }
 
 
-            LogToEditorLog($"[BuildScript] Build on ENV JENKINS:{buildEnv}");
+            LogToEditorLog($"[BuildScript] Build on ENV JENKINS:{buildPlatform}");
             LogToEditorLog($"[BuildScript] Build Env Current: {options.target}");
             LogToEditorLog($"[BuildScript] Build Env OnGet: {GetCurrentBuildPlatform(buildEnv)}");
             LogToEditorLog($"[BuildScript] IsDevelop: {EditorUserBuildSettings.development}");
