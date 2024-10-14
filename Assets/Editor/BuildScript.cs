@@ -50,7 +50,7 @@ public class BuildScript
 
             LogToEditorLog($"[BuildScript] Build on ENV JENKINS:{buildPlatform}");
             LogToEditorLog($"[BuildScript] Build Env Current: {options.target}");
-            LogToEditorLog($"[BuildScript] Build Env OnGet: {GetCurrentBuildPlatform(buildEnv)}");
+            LogToEditorLog($"[BuildScript] Build Env OnGet: {GetCurrentBuildPlatform(buildPlatform)}");
             LogToEditorLog($"[BuildScript] IsDevelop: {EditorUserBuildSettings.development}");
             
 
@@ -145,7 +145,6 @@ public class BuildScript
             case "PC":
             return BuildTarget.StandaloneWindows;
         }
-
         return BuildTarget.NoTarget;
     }
 
