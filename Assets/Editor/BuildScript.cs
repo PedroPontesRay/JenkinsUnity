@@ -35,7 +35,7 @@ public class BuildScript
         {
             options.locationPathName = buildPath;
 
-            options.target = BuildTarget.StandaloneWindows; //GetCurrentBuildPlatform(buildEnv);
+            options.target = GetCurrentBuildPlatform(buildPlatform);
 
             //Setup dev
             if(buildEnv == "DEV")
@@ -48,10 +48,10 @@ public class BuildScript
             }
 
 
-
-            LogToEditorLog($"[BuildScript] Build Env Current:{options.target}");
-            LogToEditorLog($"[BuildScript] Build Env OnGet:{GetCurrentBuildPlatform(buildEnv)}");
-            LogToEditorLog($"[BuildScript] IsDevelop:{EditorUserBuildSettings.development}");
+            LogToEditorLog($"[BuildScript] Build on ENV JENKINS:{buildEnv}");
+            LogToEditorLog($"[BuildScript] Build Env Current: {options.target}");
+            LogToEditorLog($"[BuildScript] Build Env OnGet: {GetCurrentBuildPlatform(buildEnv)}");
+            LogToEditorLog($"[BuildScript] IsDevelop: {EditorUserBuildSettings.development}");
             
 
             options.options = BuildOptions.None;
