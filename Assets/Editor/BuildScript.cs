@@ -35,7 +35,7 @@ public class BuildScript
         {
             options.locationPathName = buildPath;
 
-            options.target = GetCurrentBuildPlatform(buildEnv);
+            options.target = BuildTarget.StandaloneWindows; //GetCurrentBuildPlatform(buildEnv);
 
             //Setup dev
             if(buildEnv == "DEV")
