@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class DebugUpdate : MonoBehaviour
+public class DebugUpdate : MonoBehaviour, IPointerDownHandler
 {
-    void Update()
+    public void OnPointerDown(PointerEventData eventData)
     {
-        Debug.LogError("[DebugUpdate] Debug ON UPDATE");
+        Debug.LogError($"Nome do objeto{this.gameObject.name}");
     }
 }
